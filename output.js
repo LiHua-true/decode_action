@@ -1,4 +1,4 @@
-//Sun Jan 12 2025 17:17:44 GMT+0000 (Coordinated Universal Time)
+//Sun Jan 12 2025 17:18:31 GMT+0000 (Coordinated Universal Time)
 //Base:https://github.com/echo094/decode-js
 //Modify:https://github.com/smallfawn/decode_action
 const $ = new Env("巴奴火锅"),
