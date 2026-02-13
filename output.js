@@ -1,388 +1,697 @@
-//Sat Jan 17 2026 06:49:55 GMT+0000 (Coordinated Universal Time)
+//Fri Feb 13 2026 06:56:05 GMT+0000 (Coordinated Universal Time)
 //Base:https://github.com/echo094/decode-js
 //Modify:https://github.com/smallfawn/decode_action
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  "value": true
-});
-const axios_1 = require("axios"),
-  cheerio_1 = require("cheerio"),
-  CryptoJs = require("crypto-js"),
-  he = require("he"),
-  pageSize = 20;
-function formatMusicItem(_0x5002c8) {
-  var _0x30cc11, _0x421df4, _0xffebeb, _0x3a2f8c, _0x3845e4, _0x2b98f, _0x20d47f, _0x5a6943, _0x29c4b7;
-  return {
-    "id": (_0x3a2f8c = _0x5002c8.FileHash) !== null && _0x3a2f8c !== void 0 ? _0x3a2f8c : _0x5002c8.Grp[0].FileHash,
-    "title": (_0x30cc11 = _0x5002c8.SongName) !== null && _0x30cc11 !== void 0 ? _0x30cc11 : _0x5002c8.OriSongName,
-    "artist": (_0x421df4 = _0x5002c8.SingerName) !== null && _0x421df4 !== void 0 ? _0x421df4 : _0x5002c8.Singers[0].name,
-    "album": (_0xffebeb = _0x5002c8.AlbumName) !== null && _0xffebeb !== void 0 ? _0xffebeb : _0x5002c8.Grp[0].AlbumName,
-    "album_id": (_0x3845e4 = _0x5002c8.AlbumID) !== null && _0x3845e4 !== void 0 ? _0x3845e4 : _0x5002c8.Grp[0].AlbumID,
-    "album_audio_id": 0,
-    "duration": _0x5002c8.Duration,
-    "artwork": ((_0x2b98f = _0x5002c8.Image) !== null && _0x2b98f !== void 0 ? _0x2b98f : _0x5002c8.Grp[0].Image).replace("{size}", "1080"),
-    "320hash": (_0x29c4b7 = _0x5002c8.HQFileHash) !== null && _0x29c4b7 !== void 0 ? _0x29c4b7 : undefined,
-    "sqhash": (_0x20d47f = _0x5002c8.SQFileHash) !== null && _0x20d47f !== void 0 ? _0x20d47f : undefined,
-    "ResFileHash": (_0x5a6943 = _0x5002c8.ResFileHash) !== null && _0x5a6943 !== void 0 ? _0x5a6943 : undefined
-  };
-}
-function formatMusicItem2(_0x8e7500) {
-  var _0x2b7da0, _0xe00d3b, _0x28c24d, _0x2eb017, _0x364b07, _0x260b2b, _0x3d326a;
-  return {
-    "id": _0x8e7500.hash,
-    "title": _0x8e7500.songname,
-    "artist": (_0x2b7da0 = _0x8e7500.singername) !== null && _0x2b7da0 !== void 0 ? _0x2b7da0 : ((_0x28c24d = (_0xe00d3b = _0x8e7500.authors) === null || _0xe00d3b === void 0 ? void 0 : _0xe00d3b.map(_0x4a2bec => {
-      var _0x23c971;
-      return (_0x23c971 = _0x4a2bec === null || _0x4a2bec === void 0 ? void 0 : _0x4a2bec.author_name) !== null && _0x23c971 !== void 0 ? _0x23c971 : "";
-    })) === null || _0x28c24d === void 0 ? void 0 : _0x28c24d.join(", ")) || ((_0x260b2b = (_0x364b07 = (_0x2eb017 = _0x8e7500.filename) === null || _0x2eb017 === void 0 ? void 0 : _0x2eb017.split("-")) === null || _0x364b07 === void 0 ? void 0 : _0x364b07[0]) === null || _0x260b2b === void 0 ? void 0 : _0x260b2b.trim()),
-    "album": (_0x3d326a = _0x8e7500.album_name) !== null && _0x3d326a !== void 0 ? _0x3d326a : _0x8e7500.remark,
-    "album_id": _0x8e7500.album_id,
-    "album_audio_id": _0x8e7500.album_audio_id,
-    "artwork": _0x8e7500.album_sizable_cover ? _0x8e7500.album_sizable_cover.replace("{size}", "400") : undefined,
-    "duration": _0x8e7500.duration,
-    "320hash": _0x8e7500["320hash"],
-    "sqhash": _0x8e7500.sqhash,
-    "origin_hash": _0x8e7500.origin_hash
-  };
-}
-function formatImportMusicItem(_0x145a1e) {
-  var _0x29ba59, _0x140e65, _0x426ece, _0x5e1178, _0x34f763, _0x3c02e5, _0xae2b51;
-  let _0x1a8735 = _0x145a1e.name;
-  const _0x4486ca = _0x145a1e.singername;
-  if (_0x4486ca && _0x1a8735) {
-    const _0x4a7d5a = _0x1a8735.indexOf(_0x4486ca);
-    if (_0x4a7d5a !== -1) {
-      _0x1a8735 = (_0x29ba59 = _0x1a8735.substring(_0x4a7d5a + _0x4486ca.length + 2)) === null || _0x29ba59 === void 0 ? void 0 : _0x29ba59.trim();
-    }
-    !_0x1a8735 && (_0x1a8735 = _0x4486ca);
+const _0x1558be = new _0x555c13("奈雪签到"),
+  _0x5c28c8 = require("crypto-js"),
+  _0x4214ca = require("dayjs");
+let _0x1c1dcf = ["\n"],
+  _0x1b4740 = "naixueCookie",
+  _0x1ee715 = (_0x1558be.isNode() ? process.env[_0x1b4740] : _0x1558be.getdata(_0x1b4740)) || "",
+  _0x6c0ae8 = [],
+  _0x21331e = 0,
+  _0x4ab923 = 0,
+  _0x1514a9 = "application/json",
+  _0x1a3f59 = "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.27(0x18001b37) NetType/WIFI Language/zh_CN miniProgram/wxab7430e6e8b9a4ab",
+  _0x88e09e = "https://tm-web.pin-dao.cn/",
+  _0x56f2bf = "https://tm-web.pin-dao.cn";
+const _0x181651 = "QL6ZOftGzbziPlZwfiXM",
+  _0x300ddb = "sArMTldQ9tqU19XIRDMWz7BO5WaeBnrezA";
+let _0x5b7fe6 = 8,
+  _0x1af5ff = 1.01,
+  _0x44a18d = "naixue",
+  _0x1247d0 = "https://leafxcy.coding.net/api/user/leafxcy/project/validcode/shared-depot/validCode/git/blob/master/code.json";
+class _0x447874 {
+  constructor(_0x1dae60) {
+    this.index = ++_0x21331e;
+    this.name = this.index;
+    this.valid = false;
+    this.auth = _0x1dae60;
   }
-  const _0x49babd = _0x145a1e.relate_goods;
-  return {
-    "id": _0x145a1e.hash,
-    "title": _0x1a8735,
-    "artist": _0x4486ca,
-    "album": (_0x140e65 = _0x145a1e.albumname) !== null && _0x140e65 !== void 0 ? _0x140e65 : "",
-    "album_id": _0x145a1e.album_id,
-    "album_audio_id": _0x145a1e.album_audio_id,
-    "artwork": (_0x5e1178 = (_0x426ece = _0x145a1e === null || _0x145a1e === void 0 ? void 0 : _0x145a1e.info) === null || _0x426ece === void 0 ? void 0 : _0x426ece.image) === null || _0x5e1178 === void 0 ? void 0 : _0x5e1178.replace("{size}", "400"),
-    "320hash": (_0x34f763 = _0x49babd === null || _0x49babd === void 0 ? void 0 : _0x49babd[1]) === null || _0x34f763 === void 0 ? void 0 : _0x34f763.hash,
-    "sqhash": (_0x3c02e5 = _0x49babd === null || _0x49babd === void 0 ? void 0 : _0x49babd[2]) === null || _0x3c02e5 === void 0 ? void 0 : _0x3c02e5.hash,
-    "origin_hash": (_0xae2b51 = _0x49babd === null || _0x49babd === void 0 ? void 0 : _0x49babd[3]) === null || _0xae2b51 === void 0 ? void 0 : _0xae2b51.hash
-  };
-}
-const headers = {
-  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36",
-  "Accept": "*/*",
-  "Accept-Encoding": "gzip, deflate",
-  "Accept-Language": "zh-CN,zh;q=0.9"
-};
-async function searchMusic(_0x54cde4, _0x310c71) {
-  const _0x4a9ca5 = (await axios_1.default.get("https://songsearch.kugou.com/song_search_v2", {
-      "headers": headers,
-      "params": {
-        "keyword": _0x54cde4,
-        "page": _0x310c71,
-        "pagesize": pageSize,
-        "userid": 0,
-        "clientver": "",
-        "platform": "WebFilter",
-        "filter": 2,
-        "iscorrection": 1,
-        "privilege_filter": 0,
-        "area_code": 1
-      }
-    })).data,
-    _0x3115e9 = _0x4a9ca5.data.lists.map(formatMusicItem);
-  return {
-    "isEnd": _0x310c71 * pageSize >= _0x4a9ca5.data.total,
-    "data": _0x3115e9
-  };
-}
-async function searchAlbum(_0x3c2107, _0x28ecaf) {
-  const _0xb93857 = (await axios_1.default.get("http://msearch.kugou.com/api/v3/search/album", {
-      "headers": headers,
-      "params": {
-        "version": 9108,
-        "iscorrection": 1,
-        "highlight": "em",
-        "plat": 0,
-        "keyword": _0x3c2107,
-        "pagesize": 20,
-        "page": _0x28ecaf,
-        "sver": 2,
-        "with_res_tag": 0
-      }
-    })).data,
-    _0x56b902 = _0xb93857.data.info.map(_0x285c5d => {
-      var _0x42f7ae, _0x440cbb;
-      return {
-        "id": _0x285c5d.albumid,
-        "artwork": (_0x42f7ae = _0x285c5d.imgurl) === null || _0x42f7ae === void 0 ? void 0 : _0x42f7ae.replace("{size}", "400"),
-        "artist": _0x285c5d.singername,
-        "title": (0, cheerio_1.load)(_0x285c5d.albumname).text(),
-        "description": _0x285c5d.intro,
-        "date": (_0x440cbb = _0x285c5d.publishtime) === null || _0x440cbb === void 0 ? void 0 : _0x440cbb.slice(0, 10)
-      };
-    });
-  return {
-    "isEnd": _0x28ecaf * 20 >= _0xb93857.data.total,
-    "data": _0x56b902
-  };
-}
-async function searchMusicSheet(_0x4bc373, _0x1a0a22) {
-  const _0x4ad1b4 = (await axios_1.default.get("http://mobilecdn.kugou.com/api/v3/search/special", {
-      "headers": headers,
-      "params": {
-        "format": "json",
-        "keyword": _0x4bc373,
-        "page": _0x1a0a22,
-        "pagesize": pageSize,
-        "showtype": 1
-      }
-    })).data,
-    _0x5b8acd = _0x4ad1b4.data.info.map(_0x32a9b7 => ({
-      "title": _0x32a9b7.specialname,
-      "createAt": _0x32a9b7.publishtime,
-      "description": _0x32a9b7.intro,
-      "artist": _0x32a9b7.nickname,
-      "coverImg": _0x32a9b7.imgurl,
-      "gid": _0x32a9b7.gid,
-      "playCount": _0x32a9b7.playcount,
-      "id": _0x32a9b7.specialid,
-      "worksNum": _0x32a9b7.songcount
-    }));
-  return {
-    "isEnd": _0x1a0a22 * pageSize >= _0x4ad1b4.data.total,
-    "data": _0x5b8acd
-  };
-}
-const qualityLevels = {
-  "low": "standard",
-  "standard": "exhigh",
-  "high": "lossless",
-  "super": "hires"
-};
-async function getMediaSource(_0x33d1bd, _0x26e0e3) {
-  const _0x3c67bf = (await axios_1.default.get("https://music.haitangw.cc/kgqq/kg.php?id=" + _0x33d1bd.id + "&type=json&level=" + qualityLevels[_0x26e0e3])).data;
-  return {
-    "url": _0x3c67bf.data.url
-  };
-}
-async function getTopLists() {
-  const _0x109c23 = (await axios_1.default.get("http://mobilecdnbj.kugou.com/api/v3/rank/list?version=9108&plat=0&showtype=2&parentid=0&apiver=6&area_code=1&withsong=0&with_res_tag=0", {
-      "headers": headers
-    })).data.data.info,
-    _0x240465 = [{
-      "title": "热门榜单",
-      "data": []
-    }, {
-      "title": "特色音乐榜",
-      "data": []
-    }, {
-      "title": "全球榜",
-      "data": []
-    }],
-    _0x5a72e8 = {
-      "title": "其他",
-      "data": []
+  getBody() {
+    let _0xfcecbc = parseInt(_0x1558be.randomString(6, "123456789")),
+      _0x387ae5 = Math.floor(Date.now() / 1000),
+      _0x3c484d = "nonce=" + _0xfcecbc + "&openId=" + _0x181651 + "&timestamp=" + _0x387ae5,
+      _0x172f0c = _0x5c28c8.HmacSHA1(_0x3c484d, _0x300ddb).toString(_0x5c28c8.enc.Base64);
+    const _0x405170 = {
+      platform: "wxapp",
+      version: "4.4.23",
+      imei: "",
+      osn: "iPhone 12<iPhone13,2>",
+      sv: "iOS 15.0",
+      lang: "zh_CN",
+      currency: "CNY",
+      timeZone: "",
+      nonce: _0xfcecbc,
+      openId: _0x181651,
+      timestamp: _0x387ae5,
+      signature: _0x172f0c
     };
-  return _0x109c23.forEach(_0x381e3a => {
-    var _0x1840a3, _0x52494a, _0x5f5063, _0x4497dd;
-    if (_0x381e3a.classify === 1 || _0x381e3a.classify === 2) _0x240465[0].data.push({
-      "id": _0x381e3a.rankid,
-      "description": _0x381e3a.intro,
-      "coverImg": (_0x1840a3 = _0x381e3a.imgurl) === null || _0x1840a3 === void 0 ? void 0 : _0x1840a3.replace("{size}", "400"),
-      "title": _0x381e3a.rankname
-    });else {
-      if (_0x381e3a.classify === 3 || _0x381e3a.classify === 5) _0x240465[1].data.push({
-        "id": _0x381e3a.rankid,
-        "description": _0x381e3a.intro,
-        "coverImg": (_0x52494a = _0x381e3a.imgurl) === null || _0x52494a === void 0 ? void 0 : _0x52494a.replace("{size}", "400"),
-        "title": _0x381e3a.rankname
-      });else _0x381e3a.classify === 4 ? _0x240465[2].data.push({
-        "id": _0x381e3a.rankid,
-        "description": _0x381e3a.intro,
-        "coverImg": (_0x5f5063 = _0x381e3a.imgurl) === null || _0x5f5063 === void 0 ? void 0 : _0x5f5063.replace("{size}", "400"),
-        "title": _0x381e3a.rankname
-      }) : _0x5a72e8.data.push({
-        "id": _0x381e3a.rankid,
-        "description": _0x381e3a.intro,
-        "coverImg": (_0x4497dd = _0x381e3a.imgurl) === null || _0x4497dd === void 0 ? void 0 : _0x4497dd.replace("{size}", "400"),
-        "title": _0x381e3a.rankname
-      });
-    }
-  }), _0x5a72e8.data.length !== 0 && _0x240465.push(_0x5a72e8), _0x240465;
-}
-async function getTopListDetail(_0x549714) {
-  const _0x489767 = await axios_1.default.get("http://mobilecdnbj.kugou.com/api/v3/rank/song?version=9108&ranktype=0&plat=0&pagesize=100&area_code=1&page=1&volid=35050&rankid=" + _0x549714.id + "&with_res_tag=0", {
-    "headers": headers
-  });
-  return Object.assign(Object.assign({}, _0x549714), {
-    "musicList": _0x489767.data.data.info.map(formatMusicItem2)
-  });
-}
-async function getLyricDownload(_0x4cfa4a) {
-  const _0x140e50 = (await (0, axios_1.default)({
-    "url": "http://lyrics.kugou.com/download?ver=1&client=pc&id=" + _0x4cfa4a.id + "&accesskey=" + _0x4cfa4a.accessKey + "&fmt=lrc&charset=utf8",
-    "headers": {
-      "KG-RC": 1,
-      "KG-THash": "expand_search_manager.cpp:852736169:451",
-      "User-Agent": "KuGou2012-9020-ExpandSearchManager"
-    },
-    "method": "get",
-    "xsrfCookieName": "XSRF-TOKEN",
-    "withCredentials": true
-  })).data;
-  return {
-    "rawLrc": he.decode(CryptoJs.enc.Base64.parse(_0x140e50.content).toString(CryptoJs.enc.Utf8))
-  };
-}
-async function getLyric(_0x2cbe57) {
-  const _0x5a2f6e = (await (0, axios_1.default)({
-      "url": "http://lyrics.kugou.com/search?ver=1&man=yes&client=pc&keyword=" + _0x2cbe57.title + "&hash=" + _0x2cbe57.id + "&timelength=" + _0x2cbe57.duration,
-      "headers": {
-        "KG-RC": 1,
-        "KG-THash": "expand_search_manager.cpp:852736169:451",
-        "User-Agent": "KuGou2012-9020-ExpandSearchManager"
-      },
-      "method": "get",
-      "xsrfCookieName": "XSRF-TOKEN",
-      "withCredentials": true
-    })).data,
-    _0x3f727e = _0x5a2f6e.candidates[0];
-  return await getLyricDownload({
-    "id": _0x3f727e.id,
-    "accessKey": _0x3f727e.accesskey
-  });
-}
-async function getAlbumInfo(_0x8cadef, _0x488f0b = 1) {
-  const _0x5a57bc = (await axios_1.default.get("http://mobilecdn.kugou.com/api/v3/album/song", {
-    "params": {
-      "version": 9108,
-      "albumid": _0x8cadef.id,
-      "plat": 0,
-      "pagesize": 100,
-      "area_code": 1,
-      "page": _0x488f0b,
-      "with_res_tag": 0
-    }
-  })).data;
-  return {
-    "isEnd": _0x488f0b * 100 >= _0x5a57bc.data.total,
-    "albumItem": {
-      "worksNum": _0x5a57bc.data.total
-    },
-    "musicList": _0x5a57bc.data.info.map(_0x283bda => {
-      var _0x3a976b;
-      const [_0x48efc6, _0x4c9e02] = _0x283bda.filename.split("-");
-      return {
-        "id": _0x283bda.hash,
-        "title": _0x4c9e02.trim(),
-        "artist": _0x48efc6.trim(),
-        "album": (_0x3a976b = _0x283bda.album_name) !== null && _0x3a976b !== void 0 ? _0x3a976b : _0x283bda.remark,
-        "album_id": _0x283bda.album_id,
-        "album_audio_id": _0x283bda.album_audio_id,
-        "artwork": _0x8cadef.artwork,
-        "320hash": _0x283bda.HQFileHash,
-        "sqhash": _0x283bda.SQFileHash,
-        "origin_hash": _0x283bda.id
-      };
-    })
-  };
-}
-async function importMusicSheet(_0x216d09) {
-  var _0x2ed3b1;
-  let _0x17551d = (_0x2ed3b1 = _0x216d09.match(/^(?:.*?)(\d+)(?:.*?)$/)) === null || _0x2ed3b1 === void 0 ? void 0 : _0x2ed3b1[1],
-    _0x5a287e = [];
-  if (!_0x17551d) {
-    return;
+    const _0x3f81af = {
+      businessType: 1,
+      brand: 26000252,
+      tenantId: 1,
+      channel: 2,
+      stallType: null,
+      storeId: null
+    };
+    const _0xaaabe7 = {
+      common: _0x405170,
+      params: _0x3f81af
+    };
+    return _0xaaabe7;
   }
-  let _0x1d683c = await axios_1.default.post("http://t.kugou.com/command/", {
-    "appid": 1001,
-    "clientver": 9020,
-    "mid": "21511157a05844bd085308bc76ef3343",
-    "clienttime": 640612895,
-    "key": "36164c4015e704673c588ee202b9ecb8",
-    "data": _0x17551d
-  });
-  if (_0x1d683c.status === 200 && _0x1d683c.data.status === 1) {
-    let _0x5c7dd8 = _0x1d683c.data.data,
-      _0xb6a103 = await axios_1.default.post("http://www2.kugou.kugou.com/apps/kucodeAndShare/app/", {
-        "appid": 1001,
-        "clientver": 10112,
-        "mid": "70a02aad1ce4648e7dca77f2afa7b182",
-        "clienttime": 722219501,
-        "key": "381d7062030e8a5a94cfbe50bfe65433",
-        "data": {
-          "id": _0x5c7dd8.info.id,
-          "type": 3,
-          "userid": _0x5c7dd8.info.userid,
-          "collect_type": _0x5c7dd8.info.collect_type,
-          "page": 1,
-          "pagesize": _0x5c7dd8.info.count
-        }
-      });
-    if (_0xb6a103.status === 200 && _0xb6a103.data.status === 1) {
-      let _0x4abbec = [];
-      _0xb6a103.data.data.forEach(_0x23a08a => {
-        _0x4abbec.push({
-          "album_audio_id": 0,
-          "album_id": "0",
-          "hash": _0x23a08a.hash,
-          "id": 0,
-          "name": _0x23a08a.filename.replace(".mp3", ""),
-          "page_id": 0,
-          "type": "audio"
-        });
-      });
-      let _0x49343a = {
-        "appid": 1001,
-        "area_code": "1",
-        "behavior": "play",
-        "clientver": "10112",
-        "dfid": "2O3jKa20Gdks0LWojP3ly7ck",
-        "mid": "70a02aad1ce4648e7dca77f2afa7b182",
-        "need_hash_offset": 1,
-        "relate": 1,
-        "resource": _0x4abbec,
-        "token": "",
-        "userid": "0",
-        "vip": 0
+  async taskApi(_0x3d365e = {}) {
+    let _0x192174 = {};
+    try {
+      let _0x4fd752 = _0x3d365e.url.replace("//", "/").split("/")[1],
+        _0x4293ce = _0x3d365e.url;
+      if (_0x3d365e.queryParam) {
+        _0x4293ce += "?" + _0x1558be.json2str(_0x3d365e.queryParam, "&", true);
+      }
+      let _0x49f7b0 = {
+        url: _0x4293ce,
+        headers: {
+          Host: _0x4fd752,
+          Connection: "keep-alive",
+          "User-Agent": _0x1a3f59,
+          Authorization: "Bearer " + this.auth,
+          Referer: _0x88e09e,
+          Origin: _0x56f2bf
+        },
+        timeout: 5000
       };
-      var _0x507872 = await axios_1.default.post("https://gateway.kugou.com/v2/get_res_privilege/lite?appid=1001&clienttime=1668883879&clientver=10112&dfid=2O3jKa20Gdks0LWojP3ly7ck&mid=70a02aad1ce4648e7dca77f2afa7b182&userid=390523108&uuid=92691C6246F86F28B149BAA1FD370DF1", _0x49343a, {
-        "headers": {
-          "x-router": "media.store.kugou.com"
+      if (_0x3d365e.body) {
+        let _0x53f53e = this.getBody();
+        Object.assign(_0x53f53e.params, _0x3d365e.body);
+        _0x49f7b0.headers["Content-Type"] = _0x3d365e["Content-Type"] || _0x1514a9;
+        if (_0x49f7b0.headers["Content-Type"].includes("json")) {
+          _0x49f7b0.body = JSON.stringify(_0x53f53e);
+        } else {
+          for (let _0xe4d08e in _0x53f53e) {
+            typeof _0x53f53e[_0xe4d08e] === "object" && (_0x53f53e[_0xe4d08e] = JSON.stringify(_0x53f53e[_0xe4d08e]));
+          }
+          _0x49f7b0.body = _0x1558be.json2str(_0x53f53e, "&");
         }
-      });
-      _0xb6a103.status === 200 && _0xb6a103.data.status === 1 && (_0x5a287e = _0x507872.data.data.map(formatImportMusicItem));
+        _0x49f7b0.headers["Content-Length"] = _0x49f7b0.body ? Buffer.byteLength(_0x49f7b0.body, "utf8") : 0;
+      }
+      if (_0x3d365e.urlObjectParam) {
+        Object.assign(_0x49f7b0, _0x3d365e.urlObjectParam);
+      }
+      if (_0x3d365e.headerParam) {
+        Object.assign(_0x49f7b0.headers, _0x3d365e.headerParam);
+      }
+      _0x192174 = Object.assign({}, await _0x3f844e(_0x3d365e.method, _0x49f7b0));
+      _0x192174.statusCode = _0x192174?.["err"]?.["response"]?.["statusCode"] || _0x192174?.["resp"]?.["statusCode"];
+      _0x192174.statusCode != 200 && console.log("[" + _0x3d365e.fn + "]返回[" + _0x192174.statusCode + "]");
+      if (_0x192174?.["resp"]?.["body"]) {
+        if (typeof _0x192174.resp.body === "object") {
+          _0x192174.result = _0x192174.resp.body;
+        } else {
+          try {
+            _0x192174.result = JSON.parse(_0x192174.resp.body);
+          } catch (_0x428503) {
+            _0x192174.result = _0x192174.resp.body;
+          }
+        }
+      }
+    } catch (_0x11f957) {
+      console.log(_0x11f957);
+    } finally {
+      return Promise.resolve(_0x192174);
     }
   }
-  return _0x5a287e;
+  async baseUserinfo() {
+    let _0x1d6ad7 = {};
+    try {
+      const _0x5451c8 = {
+        fn: "baseUserinfo",
+        method: "post",
+        url: "https://tm-web.pin-dao.cn/user/base-userinfo",
+        body: {}
+      };
+      _0x1d6ad7 = Object.assign({}, await this.taskApi(_0x5451c8));
+      let _0x55da9f = _0x1d6ad7.result;
+      if (_0x55da9f.code == 0) {
+        this.valid = true;
+        this.name = _0x55da9f.data.phone;
+        console.log("账号[" + this.index + "][" + this.name + "]登录成功");
+        await this.signRecord();
+        await this.userAccount();
+      } else {
+        console.log("账号[" + this.index + "]登录失败: " + _0x55da9f.message);
+      }
+    } catch (_0xc6ead1) {
+      console.log(_0xc6ead1);
+    } finally {
+      return Promise.resolve(_0x1d6ad7);
+    }
+  }
+  async userAccount() {
+    let _0x53d895 = {};
+    try {
+      const _0x21cd58 = {
+        fn: "userAccount",
+        method: "post",
+        url: "https://tm-web.pin-dao.cn/user/account/user-account",
+        body: {}
+      };
+      _0x53d895 = Object.assign({}, await this.taskApi(_0x21cd58));
+      let _0x533188 = _0x53d895.result;
+      _0x533188.code == 0 ? (this.coin = _0x533188.data.coin, _0x1558be.logAndNotify("账号[" + this.index + "][" + this.name + "]奈雪币: " + this.coin)) : _0x1558be.logAndNotify("账号[" + this.index + "][" + this.name + "]查询奈雪币失败: " + _0x533188.message);
+    } catch (_0x4e82c2) {
+      console.log(_0x4e82c2);
+    } finally {
+      return Promise.resolve(_0x53d895);
+    }
+  }
+  async signRecord() {
+    let _0x4a0b3c = {};
+    try {
+      let _0xf082e5 = _0x4214ca().startOf("month").format("YYYY-MM-DD"),
+        _0x4a8803 = _0x4214ca().format("YYYY-MM-DD");
+      const _0x3d8ba6 = {
+        signDate: _0xf082e5,
+        startDate: _0x4a8803
+      };
+      const _0x2ca369 = {
+        fn: "signRecord",
+        method: "post",
+        url: "https://tm-web.pin-dao.cn/user/sign/records",
+        body: _0x3d8ba6
+      };
+      _0x4a0b3c = Object.assign({}, await this.taskApi(_0x2ca369));
+      let _0x2c3d91 = _0x4a0b3c.result;
+      _0x2c3d91.code == 0 ? (console.log("今天" + (_0x2c3d91.data.status ? "已" : "未") + "签到，已签到" + _0x2c3d91.data.signCount + "天"), !_0x2c3d91.data.status && (await this.signSave())) : console.log("查询签到失败: " + _0x2c3d91.message);
+    } catch (_0x32006d) {
+      console.log(_0x32006d);
+    } finally {
+      return Promise.resolve(_0x4a0b3c);
+    }
+  }
+  async signSave() {
+    let _0x18ba5b = {};
+    try {
+      let _0x3fd188 = _0x4214ca().format("YYYY-MM-DD");
+      const _0x434606 = {
+        signDate: _0x3fd188
+      };
+      const _0x4b6afe = {
+        fn: "signSave",
+        method: "post",
+        url: "https://tm-web.pin-dao.cn/user/sign/save",
+        body: _0x434606
+      };
+      _0x18ba5b = Object.assign({}, await this.taskApi(_0x4b6afe));
+      let _0x2215c8 = _0x18ba5b.result;
+      _0x2215c8.code == 0 ? _0x2215c8.data.flag ? console.log("签到成功") : console.log("今天已经签到过了") : console.log("签到失败: " + _0x2215c8.message);
+    } catch (_0x1c4407) {
+      console.log(_0x1c4407);
+    } finally {
+      return Promise.resolve(_0x18ba5b);
+    }
+  }
+  async userTask() {
+    let _0xf7d672 = {};
+    try {
+      console.log("\n============= 账号[" + this.index + "] =============");
+      await this.baseUserinfo();
+      if (!this.valid) {
+        return Promise.resolve(_0xf7d672);
+      }
+    } catch (_0x23d8b6) {
+      console.log(_0x23d8b6);
+    } finally {
+      return Promise.resolve(_0xf7d672);
+    }
+  }
 }
-module.exports = {
-  "platform": "元力KG",
-  "version": "1.1.0",
-  "author": "公众号:科技长青&元力菌",
-  "srcUrl": "https://13413.kstore.vip/yuanli/kg.js",
-  "cacheControl": "no-cache",
-  "description": "",
-  "primaryKey": ["id", "album_id", "album_audio_id"],
-  "hints": {
-    "importMusicSheet": ["仅支持酷狗APP通过酷狗码导入，输入纯数字酷狗码即可。", "导入时间和歌单大小有关，请耐心等待"]
-  },
-  "supportedSearchType": ["music", "album", "sheet"],
-  async "search"(_0x37c94f, _0x4a5e06, _0x4da6c5) {
-    if (_0x4da6c5 === "music") return await searchMusic(_0x37c94f, _0x4a5e06);else {
-      if (_0x4da6c5 === "album") return await searchAlbum(_0x37c94f, _0x4a5e06);else {
-        if (_0x4da6c5 === "sheet") return await searchMusicSheet(_0x37c94f, _0x4a5e06);
+!(async () => {
+  if (typeof $request !== "undefined") {
+    await _0x13596c();
+  } else {
+    if (!(await _0x511dd6())) {
+      return;
+    }
+    if (!_0x392a60()) {
+      return;
+    }
+    for (let _0x3e5eaf of _0x6c0ae8) {
+      await _0x3e5eaf.userTask();
+    }
+  }
+})().catch(_0x270e22 => console.log(_0x270e22)).finally(() => _0x1558be.done());
+async function _0x13596c() {
+  if ($request.url.includes("user/base-userinfo")) {
+    try {
+      let _0x2d95f1 = $request.headers.Authorization.replace("Bearer ", ""),
+        _0x3fd741 = _0x1c1dcf[0];
+      for (let _0x104a7f of _0x1c1dcf) {
+        if (_0x1ee715?.["includes"](_0x104a7f)) {
+          _0x3fd741 = _0x104a7f;
+          break;
+        }
+      }
+      if (!_0x1ee715?.["includes"](id)) {
+        let _0x309da5 = _0x1ee715 ? _0x1ee715.split(_0x3fd741) : [];
+        _0x309da5.push(_0x2d95f1);
+        _0x1ee715 = _0x309da5.join(_0x3fd741);
+        _0x1558be.setdata(_0x1ee715, _0x1b4740);
+        _0x1558be.msg("获取第" + _0x309da5.length + "个账户CK成功，保存到变量[" + _0x1b4740 + "]: " + _0x2d95f1);
+      } else {
+        let _0x4d1628 = _0x1ee715.split(_0x3fd741);
+        for (let _0x18a74a in _0x4d1628) {
+          console.log(_0x18a74a);
+          if (_0x4d1628[_0x18a74a]?.["includes"](id)) {
+            _0x4d1628[_0x18a74a] = _0x2d95f1;
+            _0x1558be.msg("更新第" + (Number(_0x18a74a) + 1) + "个账户CK成功，保存到变量[" + _0x1b4740 + "]: " + _0x2d95f1);
+            break;
+          }
+        }
+        _0x1ee715 = _0x4d1628.join(_0x3fd741);
+        _0x1558be.setdata(_0x1ee715, _0x1b4740);
+      }
+    } catch (_0x312dfd) {}
+  }
+}
+function _0x392a60() {
+  if (_0x1ee715) {
+    let _0x4695da = _0x1c1dcf[0];
+    for (let _0x3fa23f of _0x1c1dcf) {
+      if (_0x1ee715.indexOf(_0x3fa23f) > -1) {
+        _0x4695da = _0x3fa23f;
+        break;
       }
     }
-  },
-  "getMediaSource": getMediaSource,
-  "getTopLists": getTopLists,
-  "getLyric": getLyric,
-  "getTopListDetail": getTopListDetail,
-  "getAlbumInfo": getAlbumInfo,
-  "importMusicSheet": importMusicSheet
-};
+    for (let _0x192f55 of _0x1ee715.split(_0x4695da)) {
+      if (_0x192f55) {
+        _0x6c0ae8.push(new _0x447874(_0x192f55));
+      }
+    }
+    _0x4ab923 = _0x6c0ae8.length;
+  } else {
+    console.log("未找到CK: " + _0x1b4740);
+    return false;
+  }
+  console.log("共找到" + _0x4ab923 + "个账号");
+  return true;
+}
+async function _0x511dd6(_0x33bba8 = 0) {
+  let _0x40ca20 = false;
+  try {
+    const _0x4faf34 = {
+      url: _0x1247d0,
+      timeout: 5000
+    };
+    let _0xdf6b71 = null,
+      _0x5bf14b = await _0x3f844e("get", _0x4faf34);
+    if (_0x5bf14b.err) {
+      console.log("服务器错误[" + _0x5bf14b?.["resp"]?.["statusCode"] + "]，重试...");
+    } else {
+      try {
+        _0xdf6b71 = JSON.parse(_0x5bf14b.resp.body);
+        _0xdf6b71 = JSON.parse(_0xdf6b71.data.file.data);
+      } catch (_0x1a0777) {
+        console.log(_0x1a0777);
+      }
+    }
+    if (!_0xdf6b71) {
+      if (_0x33bba8 < _0x5b7fe6) {
+        _0x40ca20 = await _0x511dd6(++_0x33bba8);
+      }
+    } else {
+      _0xdf6b71?.["commonNotify"] && _0xdf6b71.commonNotify.length > 0 && _0x1558be.logAndNotify(_0xdf6b71.commonNotify.join("\n") + "\n", false);
+      _0xdf6b71?.["commonMsg"] && _0xdf6b71.commonMsg.length > 0 && console.log(_0xdf6b71.commonMsg.join("\n") + "\n");
+      if (_0xdf6b71[_0x44a18d]) {
+        let _0x232651 = _0xdf6b71[_0x44a18d];
+        _0x232651.status == 0 ? _0x1af5ff >= _0x232651.version ? (_0x40ca20 = true, console.log(_0x232651.msg[_0x232651.status]), console.log(_0x232651.updateMsg), console.log("现在运行的脚本版本是：" + _0x1af5ff + "，最新脚本版本：" + _0x232651.latestVersion)) : console.log(_0x232651.versionMsg) : console.log(_0x232651.msg[_0x232651.status]);
+      } else {
+        console.log(_0xdf6b71.errorMsg);
+      }
+    }
+  } catch (_0x276f70) {
+    console.log(_0x276f70);
+  } finally {
+    return Promise.resolve(_0x40ca20);
+  }
+}
+async function _0x3f844e(_0x38f768, _0x522013) {
+  return new Promise(_0x54c634 => {
+    _0x1558be.send(_0x38f768, _0x522013, async (_0x1c61f8, _0x40d8a2, _0x1f4289) => {
+      const _0x125eea = {
+        err: _0x1c61f8,
+        req: _0x40d8a2,
+        resp: _0x1f4289
+      };
+      _0x54c634(_0x125eea);
+    });
+  });
+}
+function _0x555c13(_0x414333, _0x174318) {
+  "undefined" != typeof process && JSON.stringify(process.env).indexOf("GITHUB") > -1 && process.exit(0);
+  return new class {
+    constructor(_0x74d04f, _0x3c955f) {
+      this.name = _0x74d04f;
+      this.notifyStr = "";
+      this.notifyFlag = false;
+      this.startTime = new Date().getTime();
+      Object.assign(this, _0x3c955f);
+      console.log(this.name + " 开始运行：\n");
+    }
+    isNode() {
+      return "undefined" != typeof module && !!module.exports;
+    }
+    isQuanX() {
+      return "undefined" != typeof $task;
+    }
+    isSurge() {
+      return "undefined" != typeof $httpClient && "undefined" == typeof $loon;
+    }
+    isLoon() {
+      return "undefined" != typeof $loon;
+    }
+    getdata(_0x8c45c0) {
+      let _0x296859 = this.getval(_0x8c45c0);
+      if (/^@/.test(_0x8c45c0)) {
+        const [, _0x153872, _0x984855] = /^@(.*?)\.(.*?)$/.exec(_0x8c45c0),
+          _0x5e22ed = _0x153872 ? this.getval(_0x153872) : "";
+        if (_0x5e22ed) {
+          try {
+            const _0x593dac = JSON.parse(_0x5e22ed);
+            _0x296859 = _0x593dac ? this.lodash_get(_0x593dac, _0x984855, "") : _0x296859;
+          } catch (_0x8f28ce) {
+            _0x296859 = "";
+          }
+        }
+      }
+      return _0x296859;
+    }
+    setdata(_0x51cdb9, _0xd7d5b1) {
+      let _0xaf7a5c = !1;
+      if (/^@/.test(_0xd7d5b1)) {
+        const [, _0x43558d, _0x5c3226] = /^@(.*?)\.(.*?)$/.exec(_0xd7d5b1),
+          _0x52f1f3 = this.getval(_0x43558d),
+          _0x5cda88 = _0x43558d ? "null" === _0x52f1f3 ? null : _0x52f1f3 || "{}" : "{}";
+        try {
+          const _0x59ca60 = JSON.parse(_0x5cda88);
+          this.lodash_set(_0x59ca60, _0x5c3226, _0x51cdb9);
+          _0xaf7a5c = this.setval(JSON.stringify(_0x59ca60), _0x43558d);
+        } catch (_0x29dcd7) {
+          const _0x507eb5 = {};
+          this.lodash_set(_0x507eb5, _0x5c3226, _0x51cdb9);
+          _0xaf7a5c = this.setval(JSON.stringify(_0x507eb5), _0x43558d);
+        }
+      } else {
+        _0xaf7a5c = this.setval(_0x51cdb9, _0xd7d5b1);
+      }
+      return _0xaf7a5c;
+    }
+    getval(_0x4ecc89) {
+      return this.isSurge() || this.isLoon() ? $persistentStore.read(_0x4ecc89) : this.isQuanX() ? $prefs.valueForKey(_0x4ecc89) : this.isNode() ? (this.data = this.loaddata(), this.data[_0x4ecc89]) : this.data && this.data[_0x4ecc89] || null;
+    }
+    setval(_0x23a07e, _0x13baa2) {
+      return this.isSurge() || this.isLoon() ? $persistentStore.write(_0x23a07e, _0x13baa2) : this.isQuanX() ? $prefs.setValueForKey(_0x23a07e, _0x13baa2) : this.isNode() ? (this.data = this.loaddata(), this.data[_0x13baa2] = _0x23a07e, this.writedata(), !0) : this.data && this.data[_0x13baa2] || null;
+    }
+    send(_0x2a3fea, _0x35efd6, _0x347778 = () => {}) {
+      if (_0x2a3fea != "get" && _0x2a3fea != "post" && _0x2a3fea != "put" && _0x2a3fea != "delete") {
+        console.log("无效的http方法：" + _0x2a3fea);
+        return;
+      }
+      if (_0x2a3fea == "get" && _0x35efd6.headers) {
+        delete _0x35efd6.headers["Content-Type"];
+        delete _0x35efd6.headers["Content-Length"];
+      } else {
+        if (_0x35efd6.body && _0x35efd6.headers) {
+          if (!_0x35efd6.headers["Content-Type"]) {
+            _0x35efd6.headers["Content-Type"] = "application/x-www-form-urlencoded";
+          }
+        }
+      }
+      if (this.isSurge() || this.isLoon()) {
+        if (this.isSurge() && this.isNeedRewrite) {
+          _0x35efd6.headers = _0x35efd6.headers || {};
+          const _0x1866da = {
+            "X-Surge-Skip-Scripting": !1
+          };
+          Object.assign(_0x35efd6.headers, _0x1866da);
+        }
+        const _0x53d8bf = {
+          method: _0x2a3fea,
+          url: _0x35efd6.url,
+          headers: _0x35efd6.headers,
+          timeout: _0x35efd6.timeout,
+          data: _0x35efd6.body
+        };
+        if (_0x2a3fea == "get") {
+          delete _0x53d8bf.data;
+        }
+        $axios(_0x53d8bf).then(_0x4e7231 => {
+          const {
+              status: _0x3cbc40,
+              request: _0x28388a,
+              headers: _0x2a6a59,
+              data: _0x357594
+            } = _0x4e7231,
+            _0xdf13b6 = {
+              statusCode: _0x3cbc40,
+              headers: _0x2a6a59,
+              body: _0x357594
+            };
+          _0x347778(null, _0x28388a, _0xdf13b6);
+        }).catch(_0x27d59f => console.log(_0x27d59f));
+      } else {
+        if (this.isQuanX()) {
+          const _0x2fe7da = {
+            hints: !1
+          };
+          _0x35efd6.method = _0x2a3fea.toUpperCase();
+          this.isNeedRewrite && (_0x35efd6.opts = _0x35efd6.opts || {}, Object.assign(_0x35efd6.opts, _0x2fe7da));
+          $task.fetch(_0x35efd6).then(_0x580337 => {
+            const {
+                statusCode: _0x3d2ccb,
+                request: _0x3d50fb,
+                headers: _0x32d9d9,
+                body: _0x3be451
+              } = _0x580337,
+              _0x2e3b5f = {
+                statusCode: _0x3d2ccb,
+                headers: _0x32d9d9,
+                body: _0x3be451
+              };
+            _0x347778(null, _0x3d50fb, _0x2e3b5f);
+          }, _0x59896d => _0x347778(_0x59896d));
+        } else {
+          if (this.isNode()) {
+            this.got = this.got ? this.got : require("got");
+            const {
+                url: _0x4fefe6,
+                ..._0x2e66e7
+              } = _0x35efd6,
+              _0x2b5417 = {
+                followRedirect: false
+              };
+            this.instance = this.got.extend(_0x2b5417);
+            this.instance[_0x2a3fea](_0x4fefe6, _0x2e66e7).then(_0x301df6 => {
+              const {
+                  statusCode: _0x3b8a3b,
+                  request: _0x1e0124,
+                  headers: _0x2cce85,
+                  body: _0x583713
+                } = _0x301df6,
+                _0x33ffde = {
+                  statusCode: _0x3b8a3b,
+                  headers: _0x2cce85,
+                  body: _0x583713
+                };
+              _0x347778(null, _0x1e0124, _0x33ffde);
+            }, _0x3dd0ee => {
+              const {
+                message: _0x1fa93c,
+                request: _0x462e08,
+                response: _0x115ddb
+              } = _0x3dd0ee;
+              _0x347778(_0x1fa93c, _0x462e08, _0x115ddb);
+            });
+          }
+        }
+      }
+    }
+    time(_0xc16e28, _0x4ab7f6 = null) {
+      let _0x4a784c = _0x4ab7f6 ? new Date(_0x4ab7f6) : new Date(),
+        _0x4cb401 = {
+          "M+": _0x4a784c.getMonth() + 1,
+          "d+": _0x4a784c.getDate(),
+          "h+": _0x4a784c.getHours(),
+          "m+": _0x4a784c.getMinutes(),
+          "s+": _0x4a784c.getSeconds(),
+          "q+": Math.floor((_0x4a784c.getMonth() + 3) / 3),
+          S: this.padStr(_0x4a784c.getMilliseconds(), 3)
+        };
+      /(y+)/.test(_0xc16e28) && (_0xc16e28 = _0xc16e28.replace(RegExp.$1, (_0x4a784c.getFullYear() + "").substr(4 - RegExp.$1.length)));
+      for (let _0xeba19 in _0x4cb401) new RegExp("(" + _0xeba19 + ")").test(_0xc16e28) && (_0xc16e28 = _0xc16e28.replace(RegExp.$1, 1 == RegExp.$1.length ? _0x4cb401[_0xeba19] : ("00" + _0x4cb401[_0xeba19]).substr(("" + _0x4cb401[_0xeba19]).length)));
+      return _0xc16e28;
+    }
+    async showmsg() {
+      if (!this.notifyFlag) {
+        return;
+      }
+      if (!this.notifyStr) {
+        return;
+      }
+      let _0x1fb760 = this.name + " 运行通知\n\n" + this.notifyStr;
+      if (_0x1558be.isNode()) {
+        var _0x1d65b1 = require("./sendNotify");
+        console.log("\n============== 推送 ==============");
+        await _0x1d65b1.sendNotify(this.name, _0x1fb760);
+      } else {
+        this.msg(_0x1fb760);
+      }
+    }
+    logAndNotify(_0x357cd8, _0xe27ce1 = true) {
+      if (_0xe27ce1) {
+        this.notifyFlag = true;
+      }
+      console.log(_0x357cd8);
+      this.notifyStr += _0x357cd8;
+      this.notifyStr += "\n";
+    }
+    logAndNotifyWithTime(_0x32ca32, _0xa5fe9 = true) {
+      if (_0xa5fe9) {
+        this.notifyFlag = true;
+      }
+      let _0x3c9607 = "[" + this.time("hh:mm:ss.S") + "]" + _0x32ca32;
+      console.log(_0x3c9607);
+      this.notifyStr += _0x3c9607;
+      this.notifyStr += "\n";
+    }
+    logWithTime(_0x55b317) {
+      console.log("[" + this.time("hh:mm:ss.S") + "]" + _0x55b317);
+    }
+    msg(_0x182f6a = t, _0x583d34 = "", _0x44ca46 = "", _0x44a649) {
+      const _0x1a0028 = _0x38fa24 => {
+        if (!_0x38fa24) {
+          return _0x38fa24;
+        }
+        if ("string" == typeof _0x38fa24) {
+          return this.isLoon() ? _0x38fa24 : this.isQuanX() ? {
+            "open-url": _0x38fa24
+          } : this.isSurge() ? {
+            url: _0x38fa24
+          } : void 0;
+        }
+        if ("object" == typeof _0x38fa24) {
+          if (this.isLoon()) {
+            let _0x1a0ad7 = _0x38fa24.openUrl || _0x38fa24.url || _0x38fa24["open-url"],
+              _0x44574c = _0x38fa24.mediaUrl || _0x38fa24["media-url"];
+            const _0x40061e = {
+              openUrl: _0x1a0ad7,
+              mediaUrl: _0x44574c
+            };
+            return _0x40061e;
+          }
+          if (this.isQuanX()) {
+            let _0x3155d7 = _0x38fa24["open-url"] || _0x38fa24.url || _0x38fa24.openUrl,
+              _0x6b169c = _0x38fa24["media-url"] || _0x38fa24.mediaUrl;
+            const _0x2a8120 = {
+              "open-url": _0x3155d7,
+              "media-url": _0x6b169c
+            };
+            return _0x2a8120;
+          }
+          if (this.isSurge()) {
+            let _0x585030 = _0x38fa24.url || _0x38fa24.openUrl || _0x38fa24["open-url"];
+            const _0x484bd6 = {
+              url: _0x585030
+            };
+            return _0x484bd6;
+          }
+        }
+      };
+      this.isMute || (this.isSurge() || this.isLoon() ? $notification.post(_0x182f6a, _0x583d34, _0x44ca46, _0x1a0028(_0x44a649)) : this.isQuanX() && $notify(_0x182f6a, _0x583d34, _0x44ca46, _0x1a0028(_0x44a649)));
+      let _0x472169 = ["", "============== 系统通知 =============="];
+      _0x472169.push(_0x182f6a);
+      _0x583d34 && _0x472169.push(_0x583d34);
+      _0x44ca46 && _0x472169.push(_0x44ca46);
+      console.log(_0x472169.join("\n"));
+    }
+    getMin(_0x14a829, _0x4f6485) {
+      return _0x14a829 < _0x4f6485 ? _0x14a829 : _0x4f6485;
+    }
+    getMax(_0x27a80f, _0x4bfe5b) {
+      return _0x27a80f < _0x4bfe5b ? _0x4bfe5b : _0x27a80f;
+    }
+    padStr(_0x397113, _0x292598, _0x577c29 = "0") {
+      let _0x294519 = String(_0x397113),
+        _0x277a64 = _0x292598 > _0x294519.length ? _0x292598 - _0x294519.length : 0,
+        _0x533ae7 = "";
+      for (let _0x364aec = 0; _0x364aec < _0x277a64; _0x364aec++) {
+        _0x533ae7 += _0x577c29;
+      }
+      _0x533ae7 += _0x294519;
+      return _0x533ae7;
+    }
+    json2str(_0x324847, _0x2ba4c0, _0x39933b = false) {
+      let _0x355024 = [];
+      for (let _0x4b1ef2 of Object.keys(_0x324847).sort()) {
+        let _0x3b680f = _0x324847[_0x4b1ef2];
+        if (_0x3b680f && _0x39933b) {
+          _0x3b680f = encodeURIComponent(_0x3b680f);
+        }
+        _0x355024.push(_0x4b1ef2 + "=" + _0x3b680f);
+      }
+      return _0x355024.join(_0x2ba4c0);
+    }
+    str2json(_0x5bb8d5, _0x229adf = false) {
+      let _0x1caa52 = {};
+      for (let _0x24f00b of _0x5bb8d5.split("&")) {
+        if (!_0x24f00b) {
+          continue;
+        }
+        let _0x55fb4e = _0x24f00b.indexOf("=");
+        if (_0x55fb4e == -1) {
+          continue;
+        }
+        let _0x32fcd6 = _0x24f00b.substr(0, _0x55fb4e),
+          _0x47d724 = _0x24f00b.substr(_0x55fb4e + 1);
+        if (_0x229adf) {
+          _0x47d724 = decodeURIComponent(_0x47d724);
+        }
+        _0x1caa52[_0x32fcd6] = _0x47d724;
+      }
+      return _0x1caa52;
+    }
+    randomPattern(_0x4b7ef6, _0x246e7d = "abcdef0123456789") {
+      let _0x41d0e2 = "";
+      for (let _0x46764f of _0x4b7ef6) {
+        if (_0x46764f == "x") {
+          _0x41d0e2 += _0x246e7d.charAt(Math.floor(Math.random() * _0x246e7d.length));
+        } else {
+          _0x46764f == "X" ? _0x41d0e2 += _0x246e7d.charAt(Math.floor(Math.random() * _0x246e7d.length)).toUpperCase() : _0x41d0e2 += _0x46764f;
+        }
+      }
+      return _0x41d0e2;
+    }
+    randomString(_0x23b47e, _0x4f6ffd = "abcdef0123456789") {
+      let _0xdcd72b = "";
+      for (let _0x49a828 = 0; _0x49a828 < _0x23b47e; _0x49a828++) {
+        _0xdcd72b += _0x4f6ffd.charAt(Math.floor(Math.random() * _0x4f6ffd.length));
+      }
+      return _0xdcd72b;
+    }
+    randomList(_0x4eb24b) {
+      let _0x237f96 = Math.floor(Math.random() * _0x4eb24b.length);
+      return _0x4eb24b[_0x237f96];
+    }
+    wait(_0x244bac) {
+      return new Promise(_0x3915f5 => setTimeout(_0x3915f5, _0x244bac));
+    }
+    async done(_0x57003b = {}) {
+      await this.showmsg();
+      const _0x1845a8 = new Date().getTime(),
+        _0x53aec7 = (_0x1845a8 - this.startTime) / 1000;
+      console.log("\n" + this.name + " 运行结束，共运行了 " + _0x53aec7 + " 秒！");
+      if (this.isSurge() || this.isQuanX() || this.isLoon()) {
+        $done(_0x57003b);
+      }
+    }
+  }(_0x414333, _0x174318);
+}
